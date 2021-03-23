@@ -1,3 +1,10 @@
+db:
+  - host: '192.168.139.140'
+  - username: 'root'
+  - password: '123456'
+redis:
+  - host: '192.168.139.140'
+  - password: ''
 smsqueue:
   feiGe:
     - userName: 'jibenliu'
