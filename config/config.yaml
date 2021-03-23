@@ -1,0 +1,13 @@
+smsqueue:
+  feiGe:
+    - userName: 'jibenliu'
+    - password: '123456'
+  163Yun:
+    - username: 'jibenliu'
+    - password: '123456'
+email:
+  - serverHost: 'smtp.exmail.qq.com'
+  - serverPort: 465
+  - fromEmail: 'jibenliu@126.com'
+  - fromPasword: '123456'
+

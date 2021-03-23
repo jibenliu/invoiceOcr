@@ -1,0 +1,7 @@
+ocrQueue:
+  baiduOcr:
+    - appid: '18914004'
+    - apiKey: '18914004'
+    - secretKey: '6wXz9T0sKtoG7ukRDtlOaohViACO28GL'
+  aliOcr:
+    - appCode: 'e4738a43cd124857a052ee4d5d2a6ae5'
