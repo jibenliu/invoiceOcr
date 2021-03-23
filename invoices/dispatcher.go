@@ -6,7 +6,7 @@ import (
 	"invoiceOcr/invoices/piaoTong"
 )
 
-var channelQueue []interface{}
+var channelQueue [interface]interface{}
 
 type channelType int
 
