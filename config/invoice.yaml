@@ -1,7 +1,6 @@
 invoiceQueue:
   baiWang:
-    - testUrl: 'http://180.167.205.215/post'
-    - prodUrl: 'http://zzs.zhenro.cn/post'
+    - Url: 'http://180.167.205.215/post'
   piaoTong:
     - platFormCode: 'MYTU'
     - platFormNo: 'y53119Yg'

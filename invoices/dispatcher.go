@@ -6,7 +6,7 @@ import (
 	"invoiceOcr/invoices/piaoTong"
 )
 
-var channelQueue [interface]interface{}
+var channelQueue interface{}
 
 type channelType int
 
@@ -68,15 +68,16 @@ func init() {
 
 	config.AddConfigPath("./config") //设置读取的文件路径
 	config.SetConfigName("invoice")  //设置读取的文件名
-	config.SetConfigType("yml")      //设置文件的类型
+	config.SetConfigType("yaml")      //设置文件的类型
 	//尝试进行配置读取
 	if err := config.ReadInConfig(); err != nil {
 		panic(err)
 	}
 	channelQueue = config.Get("invoiceQueue")
 }
+
 func Run() {
-	for channel := range channelQueue{
+	for channel := range channelQueue {
 		ctx := &Context{
 			patcher: &Patcher{
 				PatcherType: channel,
