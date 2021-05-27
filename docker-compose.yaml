@@ -1,0 +1,57 @@
+version: '1.0'
+services:
+  redis:
+    image: redis:5.0.7
+    container_name: redis
+    ports:
+      - "6379:6379"
+    tty: true
+    restart: always
+    volumes:
+      - ./redis/redis.conf:/etc/redis/redis.conf
+      - ./redis/data:/var/lib/redis
+      - ./logs/redis:/var/log/redis
+    command: redis-server --port 6379 --requirepass pwd123456  --appendonly yes
+    networks:
+      - lnmp-networks
+    mysql:
+      image: mysql:8.0
+      container_name: mysql
+      tty: true
+      restart: always
+      ports:
+        - "3306:3306" #mysql
+      volumes:
+        - ./mysql/data:/var/lib/mysql
+        - ./mysql/mysql-files:/var/lib/mysql-files
+        - ./mysql/conf:/etc/mysql
+        - ./logs/mysql:/var/log/mysql
+      environment:
+        MYSQL_ROOT_PASSWORD: 123456
+      networks:
+        - lnmp-networks
+    rabbitmq:
+      image: rabbitmq:management-alpine
+      container_name: rabbitmq
+      ports:
+        - "15672:15672" #管理界面端口
+        - "5672:5672" #服务端端口
+      volumes:
+        - ./rabbitmq/data:/var/lib/rabbitmq
+        - ./rabbitmq/conf:/etc/rabbitmq
+        - ./logs/rabbitmq/rabbitmq.log:/var/log/rabbitmq/rabbitmq.log:rw
+      environment:
+        - RABBITMQ_DEFAULT_USER=root
+        - RABBITMQ_DEFAULT_PASS=123456
+      logging:
+        driver: "json-file"
+        options:
+          max-size: "200k"
+          max-file: "10"
+      tty: true
+      restart: always
+      user: rabbitmq
+      networks:
+        - lnmp-networks
+networks:
+  lnmp-networks:

@@ -4,7 +4,7 @@ db:
   - password: '123456'
 redis:
   - host: '192.168.139.140'
-  - password: ''
+  - password: 'pwd123456'
 smsqueue:
   feiGe:
     - userName: 'jibenliu'
