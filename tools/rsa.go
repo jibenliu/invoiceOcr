@@ -71,8 +71,10 @@ func (r *RSAHelper) RsaEncrypt(plainText []byte) []byte {
 		if err != nil {
 			return []byte{}
 		}
-		defer fi.Close()
-		r.PublicReader = *fi
+		defer func(fi *os.File) {
+			_ = fi.Close()
+		}(fi)
+		r.PublicReader = interface{}(fi).(*io.Reader)
 	}
 	buf, err := io.ReadAll(*r.PublicReader)
 	if err != nil {
@@ -83,9 +85,7 @@ func (r *RSAHelper) RsaEncrypt(plainText []byte) []byte {
 	if err != nil {
 		panic(err)
 	}
-	//类型断言
 	publicKey := publicKeyInterface.(*rsa.PublicKey)
-	//对明文进行加密
 	cipherText, err := rsa.EncryptPKCS1v15(rand.Reader, publicKey, plainText)
 	if err != nil {
 		panic(err)
@@ -95,14 +95,20 @@ func (r *RSAHelper) RsaEncrypt(plainText []byte) []byte {
 
 // RsaDecrypt RSA解密
 func (r *RSAHelper) RsaDecrypt(cipherText []byte) []byte {
-	file, err := os.Open(path)
-	if err != nil {
-		panic(err)
+	if r.PrivateReader == nil {
+		fi, err := os.Open("private.pem")
+		if err != nil {
+			return []byte{}
+		}
+		defer func(fi *os.File) {
+			_ = fi.Close()
+		}(fi)
+		r.PrivateReader = interface{}(fi).(*io.Reader)
 	}
-	defer file.Close()
-	info, _ := file.Stat()
-	buf := make([]byte, info.Size())
-	file.Read(buf)
+	buf, err := io.ReadAll(*r.PrivateReader)
+	if err != nil {
+		return []byte{}
+	}
 	block, _ := pem.Decode(buf)
 	privateKey, err := x509.ParsePKCS1PrivateKey(block.Bytes)
 	if err != nil {

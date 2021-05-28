@@ -3,6 +3,7 @@ package invoices
 import (
 	"errors"
 	"github.com/spf13/viper"
+	"invoiceOcr/models"
 	baiWang2 "invoiceOcr/services/invoices/baiWang"
 	piaoTong2 "invoiceOcr/services/invoices/piaoTong"
 )
@@ -16,24 +17,6 @@ var (
 )
 var channelQueue map[string]interface{}
 
-type channelType int
-
-const (
-	BaiWang channelType = iota
-	PiaoTong
-)
-
-func (c channelType) String() string {
-	switch c {
-	case BaiWang:
-		return "baiWang"
-	case PiaoTong:
-		return "piaoTong"
-	default:
-		return "undefined"
-	}
-}
-
 type Context struct {
 	patcher *Patcher
 	Invoice interface{}
@@ -41,7 +24,7 @@ type Context struct {
 
 type Patcher struct {
 	Channel     string
-	PatcherType channelType
+	PatcherType models.ChannelType
 	Config      interface{}
 }
 
@@ -107,11 +90,11 @@ func Run() error {
 		}
 
 		switch ctx.patcher.PatcherType {
-		case PiaoTong: // 票通
+		case models.PiaoTong: // 票通
 			instance := &baiWang2.InputData{}
 			instance.ConcreteBehavior = instance
 			return instance.Run(ctx)
-		case BaiWang: // 百望
+		case models.BaiWang: // 百望
 			instance := &piaoTong2.Invoice{}
 			instance.ConcreteBehavior = instance
 			instance.Run(ctx)
